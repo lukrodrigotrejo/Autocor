@@ -20,7 +20,6 @@ public class DatabaseManager {
     private SQLiteDatabase db;
 
     private DaoMaster daoMaster;
-    private DaoSession daoSession;
 
     private Context localContext;
 
@@ -32,10 +31,6 @@ public class DatabaseManager {
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(localContext, "dbautocor_android", null);
         db = helper.getWritableDatabase();
         daoMaster = new DaoMaster(db);
-        daoSession = daoMaster.newSession();
-        // Insertar usuario de prueba si no existe
-        //daoSession.getUserDao().deleteAll();
-        //db.close();
     }
 
     public List<Cursor> getData(String Query){
