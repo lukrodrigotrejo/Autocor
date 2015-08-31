@@ -47,4 +47,8 @@ public class Tipo_Auto {
         this.Descripcion = Descripcion;
     }
 
+    public String toString(){
+        return this.getDescripcion();
+    }
+
 }

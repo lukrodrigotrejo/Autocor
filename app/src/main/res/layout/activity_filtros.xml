@@ -168,7 +168,8 @@
                 android:id="@+id/btn_depro_buscar"
                 android:layout_gravity="center"
                 android:gravity="center_horizontal"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:onClick="buscar" />
         </LinearLayout>
 
     </LinearLayout>

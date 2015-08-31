@@ -37,4 +37,8 @@ public class Marca {
         this.Descripcion = Descripcion;
     }
 
+    public String toString(){
+        return this.getDescripcion();
+    }
+
 }

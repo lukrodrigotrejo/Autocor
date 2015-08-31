@@ -37,4 +37,8 @@ public class Rubro {
         this.Descripcion = Descripcion;
     }
 
+    public String toString(){
+        return this.getDescripcion();
+    }
+
 }
