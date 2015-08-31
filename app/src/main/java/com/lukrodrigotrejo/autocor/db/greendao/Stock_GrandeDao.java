@@ -14,7 +14,7 @@ import com.lukrodrigotrejo.autocor.db.greendao.Stock_Grande;
 /** 
  * DAO for table "STOCK__GRANDE".
 */
-public class Stock_GrandeDao extends AbstractDao<Stock_Grande, Long> {
+public class Stock_GrandeDao extends AbstractDao<Stock_Grande, String> {
 
     public static final String TABLENAME = "STOCK__GRANDE";
 
@@ -23,9 +23,8 @@ public class Stock_GrandeDao extends AbstractDao<Stock_Grande, Long> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Codigo = new Property(1, String.class, "Codigo", false, "CODIGO");
-        public final static Property Descripcion = new Property(2, String.class, "Descripcion", false, "DESCRIPCION");
+        public final static Property Codigo = new Property(0, String.class, "Codigo", true, "CODIGO");
+        public final static Property Descripcion = new Property(1, String.class, "Descripcion", false, "DESCRIPCION");
     };
 
 
@@ -41,9 +40,8 @@ public class Stock_GrandeDao extends AbstractDao<Stock_Grande, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"STOCK__GRANDE\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"CODIGO\" TEXT NOT NULL UNIQUE ," + // 1: Codigo
-                "\"DESCRIPCION\" TEXT);"); // 2: Descripcion
+                "\"CODIGO\" TEXT PRIMARY KEY NOT NULL ," + // 0: Codigo
+                "\"DESCRIPCION\" TEXT);"); // 1: Descripcion
     }
 
     /** Drops the underlying database table. */
@@ -57,31 +55,29 @@ public class Stock_GrandeDao extends AbstractDao<Stock_Grande, Long> {
     protected void bindValues(SQLiteStatement stmt, Stock_Grande entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
+        String Codigo = entity.getCodigo();
+        if (Codigo != null) {
+            stmt.bindString(1, Codigo);
         }
-        stmt.bindString(2, entity.getCodigo());
  
         String Descripcion = entity.getDescripcion();
         if (Descripcion != null) {
-            stmt.bindString(3, Descripcion);
+            stmt.bindString(2, Descripcion);
         }
     }
 
     /** @inheritdoc */
     @Override
-    public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
+    public String readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public Stock_Grande readEntity(Cursor cursor, int offset) {
         Stock_Grande entity = new Stock_Grande( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.getString(offset + 1), // Codigo
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // Descripcion
+            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // Codigo
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1) // Descripcion
         );
         return entity;
     }
@@ -89,23 +85,21 @@ public class Stock_GrandeDao extends AbstractDao<Stock_Grande, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, Stock_Grande entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setCodigo(cursor.getString(offset + 1));
-        entity.setDescripcion(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setCodigo(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
+        entity.setDescripcion(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
      }
     
     /** @inheritdoc */
     @Override
-    protected Long updateKeyAfterInsert(Stock_Grande entity, long rowId) {
-        entity.setId(rowId);
-        return rowId;
+    protected String updateKeyAfterInsert(Stock_Grande entity, long rowId) {
+        return entity.getCodigo();
     }
     
     /** @inheritdoc */
     @Override
-    public Long getKey(Stock_Grande entity) {
+    public String getKey(Stock_Grande entity) {
         if(entity != null) {
-            return entity.getId();
+            return entity.getCodigo();
         } else {
             return null;
         }

@@ -110,5 +110,9 @@ public class MarcaDao extends AbstractDao<Marca, String> {
     protected boolean isEntityUpdateable() {
         return true;
     }
-    
+
+    public Marca getByCodigo(String codigo){
+        Marca marca = queryBuilder().where(Properties.Codigo.eq(codigo)).unique();
+        return marca;
+    }
 }

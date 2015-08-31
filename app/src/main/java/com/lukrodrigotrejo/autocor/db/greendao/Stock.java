@@ -6,12 +6,10 @@ package com.lukrodrigotrejo.autocor.db.greendao;
  */
 public class Stock {
 
-    private Long id;
-    /** Not-null value. */
     private String Codigo;
     private String Marca;
-    private Integer Tipo_Auto;
-    private Integer Rubro;
+    private Long Tipo_Auto;
+    private Long Rubro;
     private String NroOriginal;
     private String Descripcion;
     private Double Precio;
@@ -19,12 +17,11 @@ public class Stock {
     public Stock() {
     }
 
-    public Stock(Long id) {
-        this.id = id;
+    public Stock(String Codigo) {
+        this.Codigo = Codigo;
     }
 
-    public Stock(Long id, String Codigo, String Marca, Integer Tipo_Auto, Integer Rubro, String NroOriginal, String Descripcion, Double Precio) {
-        this.id = id;
+    public Stock(String Codigo, String Marca, Long Tipo_Auto, Long Rubro, String NroOriginal, String Descripcion, Double Precio) {
         this.Codigo = Codigo;
         this.Marca = Marca;
         this.Tipo_Auto = Tipo_Auto;
@@ -34,20 +31,10 @@ public class Stock {
         this.Precio = Precio;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    /** Not-null value. */
     public String getCodigo() {
         return Codigo;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setCodigo(String Codigo) {
         this.Codigo = Codigo;
     }
@@ -60,19 +47,19 @@ public class Stock {
         this.Marca = Marca;
     }
 
-    public Integer getTipo_Auto() {
+    public Long getTipo_Auto() {
         return Tipo_Auto;
     }
 
-    public void setTipo_Auto(Integer Tipo_Auto) {
+    public void setTipo_Auto(Long Tipo_Auto) {
         this.Tipo_Auto = Tipo_Auto;
     }
 
-    public Integer getRubro() {
+    public Long getRubro() {
         return Rubro;
     }
 
-    public void setRubro(Integer Rubro) {
+    public void setRubro(Long Rubro) {
         this.Rubro = Rubro;
     }
 

@@ -1,6 +1,23 @@
 <resources>
     <string name="app_name">Autocor</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_sync">Sincronizar</string>
+    <string name="action_bb">Base de datos</string>
+    <string name="action_filtros">Filtros</string>
+    <string name="tv_codigo">Codigo</string>
+    <string name="tv_descripcion">Descripcion</string>
+    <string name="title_activity_detalle_producto">DetalleProducto</string>
+    <string name="codigo">Código: </string>
+    <string name="marca">Marca: </string>
+    <string name="tipoAuto">Tipo: </string>
+    <string name="rubro">Rubro: </string>
+    <string name="nroOriginal">Número Original: </string>
+    <string name="descripcion">Descripción: </string>
+    <string name="precio">Precio: </string>
+    <string name="limpiar">Limpiar</string>
+    <string name="buscar">Buscar</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_filtros">Filtros</string>
 </resources>

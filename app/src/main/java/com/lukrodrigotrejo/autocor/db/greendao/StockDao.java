@@ -14,7 +14,7 @@ import com.lukrodrigotrejo.autocor.db.greendao.Stock;
 /** 
  * DAO for table "STOCK".
 */
-public class StockDao extends AbstractDao<Stock, Long> {
+public class StockDao extends AbstractDao<Stock, String> {
 
     public static final String TABLENAME = "STOCK";
 
@@ -23,14 +23,13 @@ public class StockDao extends AbstractDao<Stock, Long> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Codigo = new Property(1, String.class, "Codigo", false, "CODIGO");
-        public final static Property Marca = new Property(2, String.class, "Marca", false, "MARCA");
-        public final static Property Tipo_Auto = new Property(3, Integer.class, "Tipo_Auto", false, "TIPO__AUTO");
-        public final static Property Rubro = new Property(4, Integer.class, "Rubro", false, "RUBRO");
-        public final static Property NroOriginal = new Property(5, String.class, "NroOriginal", false, "NRO_ORIGINAL");
-        public final static Property Descripcion = new Property(6, String.class, "Descripcion", false, "DESCRIPCION");
-        public final static Property Precio = new Property(7, Double.class, "Precio", false, "PRECIO");
+        public final static Property Codigo = new Property(0, String.class, "Codigo", true, "CODIGO");
+        public final static Property Marca = new Property(1, String.class, "Marca", false, "MARCA");
+        public final static Property Tipo_Auto = new Property(2, Long.class, "Tipo_Auto", false, "TIPO__AUTO");
+        public final static Property Rubro = new Property(3, Long.class, "Rubro", false, "RUBRO");
+        public final static Property NroOriginal = new Property(4, String.class, "NroOriginal", false, "NRO_ORIGINAL");
+        public final static Property Descripcion = new Property(5, String.class, "Descripcion", false, "DESCRIPCION");
+        public final static Property Precio = new Property(6, Double.class, "Precio", false, "PRECIO");
     };
 
 
@@ -46,14 +45,13 @@ public class StockDao extends AbstractDao<Stock, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"STOCK\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"CODIGO\" TEXT NOT NULL UNIQUE ," + // 1: Codigo
-                "\"MARCA\" TEXT," + // 2: Marca
-                "\"TIPO__AUTO\" INTEGER," + // 3: Tipo_Auto
-                "\"RUBRO\" INTEGER," + // 4: Rubro
-                "\"NRO_ORIGINAL\" TEXT," + // 5: NroOriginal
-                "\"DESCRIPCION\" TEXT," + // 6: Descripcion
-                "\"PRECIO\" REAL);"); // 7: Precio
+                "\"CODIGO\" TEXT PRIMARY KEY NOT NULL ," + // 0: Codigo
+                "\"MARCA\" TEXT," + // 1: Marca
+                "\"TIPO__AUTO\" INTEGER," + // 2: Tipo_Auto
+                "\"RUBRO\" INTEGER," + // 3: Rubro
+                "\"NRO_ORIGINAL\" TEXT," + // 4: NroOriginal
+                "\"DESCRIPCION\" TEXT," + // 5: Descripcion
+                "\"PRECIO\" REAL);"); // 6: Precio
     }
 
     /** Drops the underlying database table. */
@@ -67,61 +65,59 @@ public class StockDao extends AbstractDao<Stock, Long> {
     protected void bindValues(SQLiteStatement stmt, Stock entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
+        String Codigo = entity.getCodigo();
+        if (Codigo != null) {
+            stmt.bindString(1, Codigo);
         }
-        stmt.bindString(2, entity.getCodigo());
  
         String Marca = entity.getMarca();
         if (Marca != null) {
-            stmt.bindString(3, Marca);
+            stmt.bindString(2, Marca);
         }
  
-        Integer Tipo_Auto = entity.getTipo_Auto();
+        Long Tipo_Auto = entity.getTipo_Auto();
         if (Tipo_Auto != null) {
-            stmt.bindLong(4, Tipo_Auto);
+            stmt.bindLong(3, Tipo_Auto);
         }
  
-        Integer Rubro = entity.getRubro();
+        Long Rubro = entity.getRubro();
         if (Rubro != null) {
-            stmt.bindLong(5, Rubro);
+            stmt.bindLong(4, Rubro);
         }
  
         String NroOriginal = entity.getNroOriginal();
         if (NroOriginal != null) {
-            stmt.bindString(6, NroOriginal);
+            stmt.bindString(5, NroOriginal);
         }
  
         String Descripcion = entity.getDescripcion();
         if (Descripcion != null) {
-            stmt.bindString(7, Descripcion);
+            stmt.bindString(6, Descripcion);
         }
  
         Double Precio = entity.getPrecio();
         if (Precio != null) {
-            stmt.bindDouble(8, Precio);
+            stmt.bindDouble(7, Precio);
         }
     }
 
     /** @inheritdoc */
     @Override
-    public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
+    public String readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public Stock readEntity(Cursor cursor, int offset) {
         Stock entity = new Stock( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.getString(offset + 1), // Codigo
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // Marca
-            cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // Tipo_Auto
-            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // Rubro
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // NroOriginal
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // Descripcion
-            cursor.isNull(offset + 7) ? null : cursor.getDouble(offset + 7) // Precio
+            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // Codigo
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // Marca
+            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // Tipo_Auto
+            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // Rubro
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // NroOriginal
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // Descripcion
+            cursor.isNull(offset + 6) ? null : cursor.getDouble(offset + 6) // Precio
         );
         return entity;
     }
@@ -129,28 +125,26 @@ public class StockDao extends AbstractDao<Stock, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, Stock entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setCodigo(cursor.getString(offset + 1));
-        entity.setMarca(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setTipo_Auto(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
-        entity.setRubro(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
-        entity.setNroOriginal(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setDescripcion(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setPrecio(cursor.isNull(offset + 7) ? null : cursor.getDouble(offset + 7));
+        entity.setCodigo(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
+        entity.setMarca(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setTipo_Auto(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
+        entity.setRubro(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
+        entity.setNroOriginal(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setDescripcion(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setPrecio(cursor.isNull(offset + 6) ? null : cursor.getDouble(offset + 6));
      }
     
     /** @inheritdoc */
     @Override
-    protected Long updateKeyAfterInsert(Stock entity, long rowId) {
-        entity.setId(rowId);
-        return rowId;
+    protected String updateKeyAfterInsert(Stock entity, long rowId) {
+        return entity.getCodigo();
     }
     
     /** @inheritdoc */
     @Override
-    public Long getKey(Stock entity) {
+    public String getKey(Stock entity) {
         if(entity != null) {
-            return entity.getId();
+            return entity.getCodigo();
         } else {
             return null;
         }
@@ -160,6 +154,11 @@ public class StockDao extends AbstractDao<Stock, Long> {
     @Override    
     protected boolean isEntityUpdateable() {
         return true;
+    }
+
+    public Stock getByCodigo(String codigo){
+        Stock stock = queryBuilder().where(Properties.Codigo.eq(codigo)).unique();
+        return stock;
     }
     
 }

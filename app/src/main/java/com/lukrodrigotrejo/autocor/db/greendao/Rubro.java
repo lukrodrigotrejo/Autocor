@@ -6,36 +6,26 @@ package com.lukrodrigotrejo.autocor.db.greendao;
  */
 public class Rubro {
 
-    private Long id;
-    private int Codigo;
+    private Long Codigo;
     private String Descripcion;
 
     public Rubro() {
     }
 
-    public Rubro(Long id) {
-        this.id = id;
+    public Rubro(Long Codigo) {
+        this.Codigo = Codigo;
     }
 
-    public Rubro(Long id, int Codigo, String Descripcion) {
-        this.id = id;
+    public Rubro(Long Codigo, String Descripcion) {
         this.Codigo = Codigo;
         this.Descripcion = Descripcion;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public int getCodigo() {
+    public Long getCodigo() {
         return Codigo;
     }
 
-    public void setCodigo(int Codigo) {
+    public void setCodigo(Long Codigo) {
         this.Codigo = Codigo;
     }
 

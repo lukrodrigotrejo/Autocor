@@ -6,38 +6,28 @@ package com.lukrodrigotrejo.autocor.db.greendao;
  */
 public class Tipo_Auto {
 
-    private Long id;
-    private int Codigo;
+    private Long Codigo;
     private String Marca;
     private String Descripcion;
 
     public Tipo_Auto() {
     }
 
-    public Tipo_Auto(Long id) {
-        this.id = id;
+    public Tipo_Auto(Long Codigo) {
+        this.Codigo = Codigo;
     }
 
-    public Tipo_Auto(Long id, int Codigo, String Marca, String Descripcion) {
-        this.id = id;
+    public Tipo_Auto(Long Codigo, String Marca, String Descripcion) {
         this.Codigo = Codigo;
         this.Marca = Marca;
         this.Descripcion = Descripcion;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public int getCodigo() {
+    public Long getCodigo() {
         return Codigo;
     }
 
-    public void setCodigo(int Codigo) {
+    public void setCodigo(Long Codigo) {
         this.Codigo = Codigo;
     }
 

@@ -6,38 +6,25 @@ package com.lukrodrigotrejo.autocor.db.greendao;
  */
 public class Stock_Grande {
 
-    private Long id;
-    /** Not-null value. */
     private String Codigo;
     private String Descripcion;
 
     public Stock_Grande() {
     }
 
-    public Stock_Grande(Long id) {
-        this.id = id;
+    public Stock_Grande(String Codigo) {
+        this.Codigo = Codigo;
     }
 
-    public Stock_Grande(Long id, String Codigo, String Descripcion) {
-        this.id = id;
+    public Stock_Grande(String Codigo, String Descripcion) {
         this.Codigo = Codigo;
         this.Descripcion = Descripcion;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    /** Not-null value. */
     public String getCodigo() {
         return Codigo;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setCodigo(String Codigo) {
         this.Codigo = Codigo;
     }

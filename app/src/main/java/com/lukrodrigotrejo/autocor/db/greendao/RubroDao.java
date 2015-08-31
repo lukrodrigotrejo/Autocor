@@ -23,9 +23,8 @@ public class RubroDao extends AbstractDao<Rubro, Long> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Codigo = new Property(1, int.class, "Codigo", false, "CODIGO");
-        public final static Property Descripcion = new Property(2, String.class, "Descripcion", false, "DESCRIPCION");
+        public final static Property Codigo = new Property(0, Long.class, "Codigo", true, "CODIGO");
+        public final static Property Descripcion = new Property(1, String.class, "Descripcion", false, "DESCRIPCION");
     };
 
 
@@ -41,9 +40,8 @@ public class RubroDao extends AbstractDao<Rubro, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"RUBRO\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"CODIGO\" INTEGER NOT NULL UNIQUE ," + // 1: Codigo
-                "\"DESCRIPCION\" TEXT);"); // 2: Descripcion
+                "\"CODIGO\" INTEGER PRIMARY KEY ," + // 0: Codigo
+                "\"DESCRIPCION\" TEXT);"); // 1: Descripcion
     }
 
     /** Drops the underlying database table. */
@@ -57,15 +55,14 @@ public class RubroDao extends AbstractDao<Rubro, Long> {
     protected void bindValues(SQLiteStatement stmt, Rubro entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
+        Long Codigo = entity.getCodigo();
+        if (Codigo != null) {
+            stmt.bindLong(1, Codigo);
         }
-        stmt.bindLong(2, entity.getCodigo());
  
         String Descripcion = entity.getDescripcion();
         if (Descripcion != null) {
-            stmt.bindString(3, Descripcion);
+            stmt.bindString(2, Descripcion);
         }
     }
 
@@ -79,9 +76,8 @@ public class RubroDao extends AbstractDao<Rubro, Long> {
     @Override
     public Rubro readEntity(Cursor cursor, int offset) {
         Rubro entity = new Rubro( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.getInt(offset + 1), // Codigo
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // Descripcion
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // Codigo
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1) // Descripcion
         );
         return entity;
     }
@@ -89,15 +85,14 @@ public class RubroDao extends AbstractDao<Rubro, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, Rubro entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setCodigo(cursor.getInt(offset + 1));
-        entity.setDescripcion(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setCodigo(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setDescripcion(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
      }
     
     /** @inheritdoc */
     @Override
     protected Long updateKeyAfterInsert(Rubro entity, long rowId) {
-        entity.setId(rowId);
+        entity.setCodigo(rowId);
         return rowId;
     }
     
@@ -105,7 +100,7 @@ public class RubroDao extends AbstractDao<Rubro, Long> {
     @Override
     public Long getKey(Rubro entity) {
         if(entity != null) {
-            return entity.getId();
+            return entity.getCodigo();
         } else {
             return null;
         }
@@ -116,5 +111,9 @@ public class RubroDao extends AbstractDao<Rubro, Long> {
     protected boolean isEntityUpdateable() {
         return true;
     }
-    
+
+    public Rubro getByCodigo(String codigo){
+        Rubro rubro = queryBuilder().where(Properties.Codigo.eq(codigo)).unique();
+        return rubro;
+    }
 }

@@ -14,29 +14,25 @@ public class MyDaoGenerator {
         marca.addStringProperty("Descripcion");
 
         Entity tipo_auto = schema.addEntity("Tipo_Auto");
-        tipo_auto.addIdProperty().autoincrement();
-        tipo_auto.addIntProperty("Codigo").unique().notNull();
+        tipo_auto.addLongProperty("Codigo").primaryKey();
         tipo_auto.addStringProperty("Marca");
         tipo_auto.addStringProperty("Descripcion");
 
         Entity rubro = schema.addEntity("Rubro");
-        rubro.addIdProperty().autoincrement();
-        rubro.addIntProperty("Codigo").unique().notNull();
+        rubro.addLongProperty("Codigo").primaryKey();
         rubro.addStringProperty("Descripcion");
 
         Entity stock = schema.addEntity("Stock");
-        stock.addIdProperty().autoincrement();
-        stock.addStringProperty("Codigo").unique().notNull();
+        stock.addStringProperty("Codigo").primaryKey();
         stock.addStringProperty("Marca");
-        stock.addIntProperty("Tipo_Auto");
-        stock.addIntProperty("Rubro");
+        stock.addLongProperty("Tipo_Auto");
+        stock.addLongProperty("Rubro");
         stock.addStringProperty("NroOriginal");
         stock.addStringProperty("Descripcion");
         stock.addDoubleProperty("Precio");
 
         Entity stock_grande = schema.addEntity("Stock_Grande");
-        stock_grande.addIdProperty().autoincrement();
-        stock_grande.addStringProperty("Codigo").unique().notNull();
+        stock_grande.addStringProperty("Codigo").primaryKey();
         stock_grande.addStringProperty("Descripcion");
 
         new DaoGenerator().generateAll(schema, ".");

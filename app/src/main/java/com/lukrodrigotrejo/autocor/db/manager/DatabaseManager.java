@@ -31,6 +31,7 @@ public class DatabaseManager {
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(localContext, "dbautocor_android", null);
         db = helper.getWritableDatabase();
         daoMaster = new DaoMaster(db);
+
     }
 
     public List<Cursor> getData(String Query){
