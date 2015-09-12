@@ -50,8 +50,11 @@ public class DetalleProducto extends ActionBarActivity {
         tv_nroOriginal.setText(stock.getNroOriginal());
         tv_marca.setText(Global.getDaoSession().getMarcaDao().getByCodigo(stock.getMarca()).getDescripcion());
         tv_tipoAuto.setText(Global.getDaoSession().getTipo_AutoDao().getByCodigo(stock.getTipo_Auto().toString()).getDescripcion());
-        tv_rubro.setText(Global.getDaoSession().getRubroDao().getByCodigo(stock.getRubro().toString()).getDescripcion());
-
+        try {
+            tv_rubro.setText(Global.getDaoSession().getRubroDao().getByCodigo(stock.getRubro().toString()).getDescripcion());
+        }catch(Exception e){
+            tv_rubro.setText("");
+        }
         imageView = (ImageView) findViewById(R.id.iv_producto);
         String rubro = Global.getDaoSession().getStockDao().getByCodigo(value).getRubro().toString();
         rubro = String.format("%03d", Integer.parseInt(rubro));

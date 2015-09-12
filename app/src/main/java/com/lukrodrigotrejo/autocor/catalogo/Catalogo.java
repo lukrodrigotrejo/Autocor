@@ -2,6 +2,7 @@ package com.lukrodrigotrejo.autocor.catalogo;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -32,13 +34,25 @@ import java.util.List;
 
 public class Catalogo extends ActionBarActivity {
     private ArrayList<HashMap> list;
+    int cant = 20;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalogo);
 
+        Bundle b = getIntent().getExtras();
+        final Long parRubro = b.getLong("rubro");
+        final String parMarca = b.getString("marca");
+        final Long parTipo = b.getLong("tipo");
+        final String parCodigo = b.getString("codigo");
+
+        Log.e("LOG CATALOGO", "parRubro - " + parRubro);
+        Log.e("LOG CATALOGO", "parMarca - " + parMarca);
+        Log.e("LOG CATALOGO", "parTipo - " + parTipo);
+        Log.e("LOG CATALOGO", "parCodigo - " + parCodigo);
+
         ListView lv_productos = (ListView) findViewById(R.id.listView);
-        populateTable();
+        populateTable(parRubro, parMarca, parTipo, parCodigo);
         ListViewAdapter adapter = new ListViewAdapter(this, list);
         lv_productos.setAdapter(adapter);
         lv_productos.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -52,11 +66,9 @@ public class Catalogo extends ActionBarActivity {
                 detailIntent.putExtra("cod_stock", tv_codigo.getText().toString());
                 startActivity(detailIntent);
             }
-
         });
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -75,7 +87,11 @@ public class Catalogo extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_sync:
-                new DBConnectTask().execute("");
+                if(Build.VERSION.SDK_INT >= 11) {
+                    new DBConnectTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }else {
+                    new DBConnectTask().execute("");
+                }
                 return true;
             case R.id.action_database:
                 Intent dbmanager = new Intent(this, AndroidDatabaseManager.class);
@@ -92,15 +108,32 @@ public class Catalogo extends ActionBarActivity {
         }
     }
 
-    public void populateTable(){
+    public void populateTable(Long parRubro, String parMarca, Long parTipo, String parCodigo){
         list = new ArrayList<HashMap>();
 
-        List<Stock> listStock = Global.getDaoSession().getStockDao().loadAll();
-        for(int x = 0; x<50; x++){
-            HashMap temp = new HashMap();
-            temp.put(Constants.FIRST_COLUMN, listStock.get(x).getCodigo());
-            temp.put(Constants.SECOND_COLUMN, listStock.get(x).getDescripcion());
-            list.add(temp);
+        if("".equals(parCodigo)){
+            List<Stock> listStock = Global.getDaoSession().getStockDao().getbyFiltros(parRubro, parMarca, parTipo);
+
+            if(listStock.size() != 0){
+                for(Stock item : listStock){
+                    HashMap temp = new HashMap();
+                    temp.put(Constants.FIRST_COLUMN, item.getCodigo());
+                    temp.put(Constants.SECOND_COLUMN, item.getDescripcion());
+                    list.add(temp);
+                }
+            }
+        }else{
+            //TODO VERIFICAR PORQUE NO FUNCIONA EL FILTRO EN BASE AL PRODUCTO
+            List<Stock_Grande> stocks = Global.getDaoSession().getStock_GrandeDao().getStocksByCodigo(parCodigo);
+
+            if(stocks.size() != 0){
+                for(Stock_Grande item : stocks){
+                    HashMap temp = new HashMap();
+                    temp.put(Constants.FIRST_COLUMN, item.getCodigo());
+                    temp.put(Constants.SECOND_COLUMN, item.getDescripcion());
+                    list.add(temp);
+                }
+            }
         }
     }
 
@@ -108,6 +141,7 @@ public class Catalogo extends ActionBarActivity {
 
         @Override
         protected String doInBackground(String... params) {
+            Log.e("SINCRONIZANDO", "Se comenzo a sincronizar");
             String result = ("");
             Connection con;
             Statement st;
@@ -167,7 +201,7 @@ public class Catalogo extends ActionBarActivity {
             //Populate "Stock"
             try {
                 if (st != null) {
-                    ResultSet rs = st.executeQuery("select CODPIEZA, MAR_CODIGO, TIP_CODIGO, RUB_CODIGO, NROORIGINAL, DESCRIP, PRECIO from STOCK LIMIT 500;");
+                    ResultSet rs = st.executeQuery("select CODPIEZA, MAR_CODIGO, TIP_CODIGO, RUB_CODIGO, NROORIGINAL, DESCRIP, PRECIO from STOCK LIMIT 300;");
                     while (rs.next()) {
                         Stock stock = new Stock(rs.getString(1), rs.getString(2), rs.getLong(3), rs.getLong(4), rs.getString(5), rs.getString(6), rs.getDouble(7));
                         Global.getDaoSession().getStockDao().insertOrReplace(stock);
@@ -181,7 +215,7 @@ public class Catalogo extends ActionBarActivity {
             //Populate "Stock_grande"
             try {
                 if (st != null) {
-                    ResultSet rs = st.executeQuery("select codpieza, descri from stock_grande LIMIT 500;");
+                    ResultSet rs = st.executeQuery("select codpieza, descri from stock_grande LIMIT 300;");
                     while (rs.next()) {
                         Stock_Grande stock_grande = new Stock_Grande(rs.getString(1), rs.getString(2));
                         Global.getDaoSession().getStock_GrandeDao().insertOrReplace(stock_grande);

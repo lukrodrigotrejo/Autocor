@@ -4,6 +4,11 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:name=".db.manager.Global"
         android:allowBackup="true"
@@ -13,12 +18,12 @@
         <activity
             android:name=".catalogo.Catalogo"
             android:icon="@drawable/logo_autocor"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:label="@string/app_name"
+            android:parentActivityName=".catalogo.Filtros" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.lukrodrigotrejo.autocor.catalogo.Filtros" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".db.manager.AndroidDatabaseManager" />
         <activity
@@ -35,7 +40,17 @@
             android:parentActivityName=".catalogo.Catalogo" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.lukrodrigotrejo.autocor.catalogo.Catalogo" />
+                android:value="com.lukrodrigotrejo.autocor.catalogo.Login" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".catalogo.Login"
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+
         </activity>
     </application>
 
